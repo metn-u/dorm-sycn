@@ -4,6 +4,7 @@ import { useRoom } from '../contexts/RoomContext'
 import { useAuth } from '../contexts/AuthContext'
 import { Chore, Profile } from '../types'
 import TaskItem from '../components/TaskItem'
+import { LayoutGrid } from 'lucide-react'
 import { cn } from '../lib/utils'
 
 export default function Tasks() {
