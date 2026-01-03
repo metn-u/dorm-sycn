@@ -16,90 +16,115 @@ export default function Layout() {
     ]
 
     return (
-        <div className="flex h-screen bg-[#FFFDF5] overflow-hidden">
+        <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
             {/* Desktop Sidebar (Hidden on Mobile) */}
-            <aside className="hidden md:flex w-72 flex-col bg-white border-r-4 border-black">
+            <aside className="hidden md:flex w-72 flex-col bg-white border-r border-slate-200">
                 <div className="p-8">
-                    <h1 className="text-3xl font-black text-black flex items-center gap-3 uppercase tracking-tighter italic">
-                        <div className="p-2 bg-yellow-400 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                            <LayoutGrid className="w-8 h-8" />
+                    <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-3 tracking-tight">
+                        <div className="p-2 bg-indigo-50 rounded-xl text-indigo-600">
+                            <LayoutGrid className="w-6 h-6" />
                         </div>
                         DormSync
                     </h1>
-                    {room && <p className="text-xs bg-black text-white px-2 py-0.5 mt-4 font-black uppercase tracking-widest inline-block">{room.name}</p>}
+                    {room && (
+                        <div className="mt-4">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-2 py-1 rounded-md">
+                                {room.name}
+                            </span>
+                        </div>
+                    )}
                 </div>
-                <nav className="flex-1 p-6 space-y-4">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            className={cn(
-                                "flex items-center gap-4 px-6 py-4 border-2 border-black transition-all font-black uppercase tracking-tight",
-                                location.pathname === item.path
-                                    ? "bg-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-1 -translate-y-1"
-                                    : "bg-white hover:bg-slate-50"
-                            )}
-                        >
-                            <item.icon className="w-5 h-5 flex-shrink-0" strokeWidth={3} />
-                            {item.label}
-                        </Link>
-                    ))}
+                <nav className="flex-1 px-4 space-y-1">
+                    {navItems.map((item) => {
+                        const isActive = location.pathname === item.path
+                        return (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={cn(
+                                    "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 group",
+                                    isActive
+                                        ? "bg-indigo-50 text-indigo-700 font-semibold shadow-sm"
+                                        : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                                )}
+                            >
+                                <item.icon
+                                    className={cn(
+                                        "w-5 h-5 transition-colors",
+                                        isActive ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-600"
+                                    )}
+                                    strokeWidth={isActive ? 2.5 : 2}
+                                />
+                                {item.label}
+                            </Link>
+                        )
+                    })}
                 </nav>
             </aside>
 
             <div className="flex-1 flex flex-col h-full min-w-0">
                 {/* Mobile Header (Hidden on Desktop) */}
-                <header className="md:hidden bg-white border-b-4 border-black px-6 py-5 flex items-center justify-between sticky top-0 z-40">
-                    <div className="flex items-center gap-3">
-                        <div className="p-1.5 bg-yellow-400 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <header className="md:hidden bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+                    <div className="flex items-center gap-2">
+                        <div className="p-1.5 bg-indigo-50 rounded-lg text-indigo-600">
                             <LayoutGrid className="w-5 h-5" />
                         </div>
-                        <span className="font-black text-black tracking-tighter text-xl uppercase italic">DormSync</span>
+                        <span className="font-bold text-slate-900 tracking-tight text-lg">DormSync</span>
                     </div>
-                    {room && <span className="text-xs bg-black text-white px-3 py-1 font-black uppercase tracking-widest">{room.name}</span>}
+                    {room && (
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-slate-100 px-2 py-1 rounded-md">
+                            {room.name}
+                        </span>
+                    )}
                 </header>
 
                 {/* Main Content Area */}
-                <main className="flex-1 overflow-auto pb-28 md:pb-8">
-                    <div className="max-w-4xl mx-auto p-4 md:p-8">
+                <main className="flex-1 overflow-auto pb-32 md:pb-8">
+                    <div className="max-w-4xl mx-auto p-4 md:p-10">
                         <Outlet />
                     </div>
                 </main>
             </div>
 
             {/* Mobile Bottom Navigation */}
-            <nav className="md:hidden fixed bottom-6 left-6 right-6 h-20 bg-white border-4 border-black flex justify-around items-center px-2 z-50 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-2xl">
-                {navItems.map((item) => (
-                    <Link
-                        key={item.path}
-                        to={item.path}
-                        className={cn(
-                            "flex flex-col items-center justify-center relative transition-all",
-                            item.primary ? "pt-0" : "flex-1"
-                        )}
-                    >
-                        {item.primary ? (
-                            <div className="-mt-16">
-                                <div className="bg-yellow-400 text-black p-4 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all rounded-2xl hover:bg-yellow-300">
-                                    <item.icon className="w-8 h-8" strokeWidth={4} />
+            <nav className="md:hidden fixed bottom-6 left-6 right-6 h-20 bg-white/90 backdrop-blur-lg border border-slate-200 flex justify-around items-center px-4 z-50 shadow-xl rounded-[2.5rem]">
+                {navItems.map((item) => {
+                    const isActive = location.pathname === item.path
+                    if (item.primary) {
+                        return (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className="relative -mt-12"
+                            >
+                                <div className="bg-indigo-600 text-white p-4 rounded-[2rem] shadow-lg shadow-indigo-200 active:scale-90 transition-transform">
+                                    <item.icon className="w-7 h-7" strokeWidth={2.5} />
                                 </div>
-                            </div>
-                        ) : (
-                            <div className={cn(
-                                "flex flex-col items-center p-2 rounded-xl transition-all",
-                                location.pathname === item.path ? "bg-black text-white" : "text-black"
+                            </Link>
+                        )
+                    }
+                    return (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            className={cn(
+                                "flex flex-col items-center justify-center flex-1 transition-all py-2 rounded-2xl",
+                                isActive ? "text-indigo-600" : "text-slate-400"
+                            )}
+                        >
+                            <item.icon
+                                className="w-6 h-6"
+                                strokeWidth={isActive ? 2.5 : 2}
+                            />
+                            <span className={cn(
+                                "text-[10px] mt-1 font-semibold tracking-tight",
+                                isActive ? "text-indigo-600" : "text-slate-500"
                             )}>
-                                <item.icon
-                                    className="w-6 h-6 flex-shrink-0"
-                                    strokeWidth={location.pathname === item.path ? 3 : 2}
-                                />
-                                <span className="text-[9px] mt-0.5 font-black uppercase tracking-tighter">
-                                    {item.label}
-                                </span>
-                            </div>
-                        )}
-                    </Link>
-                ))}
+                                {item.label}
+                            </span>
+                        </Link>
+                    )
+                })}
             </nav>
         </div>
     )

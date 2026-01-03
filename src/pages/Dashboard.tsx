@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import { Chore, Profile } from '../types'
 import TaskItem from '../components/TaskItem'
-import { Clock } from 'lucide-react'
+import { Clock, LayoutGrid } from 'lucide-react'
 import { cn } from '../lib/utils'
 
 export default function Dashboard() {
@@ -96,74 +96,100 @@ export default function Dashboard() {
 
     return (
         <div className="space-y-10">
-            <div className="flex justify-between items-end border-b-4 border-black pb-4">
-                <h2 className="text-4xl font-black text-black uppercase tracking-tighter italic">Dashboard</h2>
-                <span className="text-sm bg-black text-white px-3 py-1 font-black uppercase tracking-widest leading-none mb-1">{room?.name}</span>
+            <div className="flex justify-between items-end pb-2 border-b border-slate-200">
+                <div>
+                    <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Dashboard</h2>
+                    <p className="text-slate-500 text-sm mt-1">Welcome back to your dorm hub.</p>
+                </div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-100 px-3 py-1.5 rounded-lg leading-none mb-1">
+                    {room?.name}
+                </span>
             </div>
 
             {loading ? (
                 <>
                     <div className="grid grid-cols-2 gap-6">
-                        <div className="h-32 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl animate-pulse"></div>
-                        <div className="h-32 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl animate-pulse"></div>
+                        <div className="h-32 bg-white border border-slate-200 rounded-[2rem] animate-pulse"></div>
+                        <div className="h-32 bg-white border border-slate-200 rounded-[2rem] animate-pulse"></div>
                     </div>
                     <div className="space-y-6 pt-6">
-                        <div className="h-8 w-48 bg-black/10 rounded animate-pulse"></div>
-                        <div className="h-24 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl animate-pulse"></div>
+                        <div className="h-8 w-48 bg-slate-200 rounded-lg animate-pulse"></div>
+                        <div className="h-48 bg-white border border-slate-200 rounded-[2rem] animate-pulse"></div>
                     </div>
                 </>
             ) : (
                 <>
-                    <div className="grid grid-cols-2 gap-6">
-                        <div className="neo-card p-6 bg-[#E0E7FF]">
-                            <p className="text-black text-xs font-black uppercase tracking-widest mb-2">My Tasks</p>
-                            <p className="text-4xl font-black text-black tracking-tighter">
-                                {pendingTasks.length} <span className="text-xl uppercase italic">Items</span>
-                            </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bento-card bg-indigo-50/50 border-indigo-100 flex flex-col justify-between">
+                            <div>
+                                <p className="text-indigo-600 text-[10px] font-bold uppercase tracking-widest mb-1">My Tasks</p>
+                                <h3 className="text-4xl font-bold text-slate-900 tracking-tight">
+                                    {pendingTasks.length}
+                                </h3>
+                            </div>
+                            <p className="text-indigo-400 text-sm font-medium mt-4 italic">Pending items</p>
                         </div>
                         <div className={cn(
-                            "neo-card p-6 transition-colors",
-                            balance >= 0 ? "bg-[#D1FAE5]" : "bg-[#FEE2E2]"
+                            "bento-card flex flex-col justify-between transition-colors",
+                            balance >= 0 ? "bg-emerald-50/50 border-emerald-100" : "bg-rose-50/50 border-rose-100"
                         )}>
-                            <p className="text-black text-xs font-black uppercase tracking-widest mb-2">Balance</p>
-                            <p className="text-4xl font-black text-black tracking-tighter leading-none">
-                                {balance >= 0 ? '+' : ''}₺{balance.toFixed(0)}
+                            <div>
+                                <p className={cn(
+                                    "text-[10px] font-bold uppercase tracking-widest mb-1",
+                                    balance >= 0 ? "text-emerald-600" : "text-rose-600"
+                                )}>Current Balance</p>
+                                <h3 className="text-4xl font-bold text-slate-900 tracking-tight leading-none">
+                                    {balance >= 0 ? '+' : ''}₺{balance.toFixed(0)}
+                                </h3>
+                            </div>
+                            <p className={cn(
+                                "text-sm font-medium mt-4 italic",
+                                balance >= 0 ? "text-emerald-400" : "text-rose-400"
+                            )}>
+                                {balance >= 0 ? "You're all set!" : "Time to settle up"}
                             </p>
                         </div>
                     </div>
 
                     <div className="space-y-6">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-2xl font-black text-black uppercase tracking-tight italic">My Pending Tasks</h3>
-                            <div className="h-1 flex-1 bg-black ml-4"></div>
+                            <h3 className="text-xl font-bold text-slate-900 tracking-tight">My Pending Tasks</h3>
+                            <div className="h-px flex-1 bg-slate-200 ml-6"></div>
                         </div>
 
                         {balance < -4000 && (
-                            <div className="bg-rose-400 neo-border p-5 flex items-start gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                <div className="p-2 bg-black text-white rounded-lg">
+                            <div className="bg-rose-600 text-white rounded-[2rem] p-6 flex items-start gap-4 shadow-lg shadow-rose-100">
+                                <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl">
                                     <Clock className="w-6 h-6" />
                                 </div>
-                                <div className="text-black">
-                                    <p className="text-lg font-black uppercase tracking-tight">High Debt Warning!</p>
-                                    <p className="text-sm font-bold mt-1">Your debt is approaching the ₺5000 limit. Settle up now or be shamed!</p>
+                                <div>
+                                    <p className="text-lg font-bold tracking-tight">High Debt Warning!</p>
+                                    <p className="text-rose-100 text-sm mt-1 font-medium opacity-90">Your debt is approaching the ₺5000 limit. Settle up now or be shamed!</p>
                                 </div>
                             </div>
                         )}
 
                         <div className="space-y-4">
                             {pendingTasks.length === 0 ? (
-                                <div className="text-center py-12 neo-card bg-white border-dashed border-4 border-black/20">
-                                    <p className="text-black/40 text-xl font-black uppercase tracking-tighter italic">No pending tasks! 🎉</p>
+                                <div className="text-center py-16 bento-card bg-slate-50/50 border-dashed border-2 border-slate-200 flex flex-col items-center justify-center">
+                                    <div className="p-4 bg-slate-100 rounded-full mb-4">
+                                        <LayoutGrid className="w-8 h-8 text-slate-300" />
+                                    </div>
+                                    <p className="text-slate-400 text-lg font-bold tracking-tight italic">No pending tasks! 🎉</p>
+                                    <p className="text-slate-400 text-sm mt-1">Enjoy your free time.</p>
                                 </div>
                             ) : (
-                                pendingTasks.map(task => (
-                                    <TaskItem
-                                        key={task.id}
-                                        task={task}
-                                        assignee={userProfile || undefined}
-                                        onToggle={toggleTask}
-                                    />
-                                ))
+                                <div className="bento-card !p-2 divide-y divide-slate-100">
+                                    {pendingTasks.map(task => (
+                                        <div key={task.id} className="first:pt-0 last:pb-0 p-4">
+                                            <TaskItem
+                                                task={task}
+                                                assignee={userProfile || undefined}
+                                                onToggle={toggleTask}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             )}
                         </div>
                     </div>
