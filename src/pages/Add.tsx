@@ -69,7 +69,7 @@ export default function Add() {
             .from('expenses')
             .select('*')
             .eq('room_id', room.id)
-            .eq('status', 'pending') // Only pending expenses count towards debt limit
+            .eq('status', 'pending')
 
         const { data: profiles } = await supabase
             .from('profiles')
@@ -82,10 +82,11 @@ export default function Add() {
             profiles.forEach(p => balances[p.id] = 0)
 
             allExpenses.forEach(exp => {
-                if (exp.type === 'direct' && exp.split_with) {
+                if (exp.split_with) {
                     balances[exp.paid_by] += exp.amount
                     balances[exp.split_with] -= exp.amount
                 } else {
+                    // Legacy group split logic
                     balances[exp.paid_by] += exp.amount
                     profiles.forEach(p => {
                         balances[p.id] -= (exp.amount / roommatesCount)
@@ -107,7 +108,7 @@ export default function Add() {
             } else {
                 const share = expenseAmount / roommatesCount
                 for (const p of profiles) {
-                    if (p.id === user.id) continue // The one who pays doesn't increase their debt
+                    if (p.id === user.id) continue
                     const newBalance = balances[p.id] - share
                     if (newBalance < -limit) {
                         limitExceeded = true
@@ -124,17 +125,57 @@ export default function Add() {
             }
         }
 
-        const { error } = await supabase
-            .from('expenses')
-            .insert({
-                description: title,
-                amount: expenseAmount,
-                paid_by: user.id,
-                room_id: room.id,
-                split_with: splitType === 'direct' ? splitWith : null,
-                type: splitType,
-                status: 'pending'
-            })
+        // 3. Insert expenses
+        let error;
+        if (splitType === 'direct') {
+            const { error: insertError } = await supabase
+                .from('expenses')
+                .insert({
+                    description: title,
+                    amount: expenseAmount,
+                    paid_by: user.id,
+                    room_id: room.id,
+                    split_with: splitWith,
+                    type: 'direct',
+                    status: 'pending'
+                })
+            error = insertError
+        } else {
+            // "Everyone" split: Create individual direct debts for each roommate (except payer)
+            // This makes the debt static and it won't be split with future roommates
+            const share = expenseAmount / (roommates.length || 1)
+            const debtors = roommates.filter(r => r.id !== user.id)
+
+            if (debtors.length === 0) {
+                // If I'm alone in the room, just create a record for myself
+                const { error: insertError } = await supabase
+                    .from('expenses')
+                    .insert({
+                        description: title,
+                        amount: expenseAmount,
+                        paid_by: user.id,
+                        room_id: room.id,
+                        split_with: user.id,
+                        type: 'direct',
+                        status: 'pending'
+                    })
+                error = insertError
+            } else {
+                const inserts = debtors.map(debtor => ({
+                    description: title,
+                    amount: share,
+                    paid_by: user.id,
+                    room_id: room.id,
+                    split_with: debtor.id,
+                    type: 'direct',
+                    status: 'pending'
+                }))
+                const { error: insertError } = await supabase
+                    .from('expenses')
+                    .insert(inserts)
+                error = insertError
+            }
+        }
 
         if (error) {
             alert(error.message)

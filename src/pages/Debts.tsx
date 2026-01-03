@@ -45,15 +45,58 @@ export default function Debts() {
     }, [room?.id])
 
     const markAsPaid = async (expenseId: string) => {
-        const { error } = await supabase
-            .from('expenses')
-            .update({ status: 'paid' })
-            .eq('id', expenseId)
+        const expense = allExpenses.find(e => e.id === expenseId)
+        if (!expense || !user || !room?.id) return
 
-        if (error) {
-            alert('Failed to mark as paid')
+        if (expense.type === 'group' && !expense.split_with) {
+            // Legacy group split: Need to split it now so others still owe
+            const share = expense.amount / (Object.keys(profiles).length || 1)
+            const otherRoommates = Object.keys(profiles).filter(pid => pid !== user.id && pid !== expense.paid_by)
+
+            // 1. Create new direct pending expenses for others
+            if (otherRoommates.length > 0) {
+                const newExpenses = otherRoommates.map(pid => ({
+                    description: expense.description,
+                    amount: share,
+                    paid_by: expense.paid_by,
+                    room_id: room.id,
+                    split_with: pid,
+                    type: 'direct',
+                    status: 'pending',
+                    created_at: expense.created_at // Keep original date
+                }))
+                await supabase.from('expenses').insert(newExpenses)
+            }
+
+            // 2. Update current one to be a direct paid expense for ME
+            const { error } = await supabase
+                .from('expenses')
+                .update({
+                    status: 'paid',
+                    type: 'direct',
+                    amount: share,
+                    split_with: user.id
+                })
+                .eq('id', expenseId)
+
+            if (error) {
+                alert('Failed to settle your share')
+            } else {
+                // Refresh data to show new state
+                window.location.reload()
+            }
         } else {
-            setAllExpenses(prev => prev.map(e => e.id === expenseId ? { ...e, status: 'paid' } : e))
+            // New direct split or already split: just mark as paid
+            const { error } = await supabase
+                .from('expenses')
+                .update({ status: 'paid' })
+                .eq('id', expenseId)
+
+            if (error) {
+                alert('Failed to mark as paid')
+            } else {
+                setAllExpenses(prev => prev.map(e => e.id === expenseId ? { ...e, status: 'paid' } : e))
+            }
         }
     }
 
@@ -74,13 +117,13 @@ export default function Debts() {
     })
 
     const calculateMyShareIOwe = (expense: Expense) => {
-        if (expense.type === 'direct') return expense.amount
+        if (expense.split_with) return expense.amount
         const roommatesCount = Object.keys(profiles).length || 1
         return expense.amount / roommatesCount
     }
 
     const calculateOthersShareOwedToMe = (expense: Expense) => {
-        if (expense.type === 'direct') return expense.amount
+        if (expense.split_with) return expense.amount
         const roommatesCount = Object.keys(profiles).length || 1
         return expense.amount - (expense.amount / roommatesCount)
     }
@@ -91,10 +134,11 @@ export default function Debts() {
         const roommatesCount = Object.keys(profiles).length || 1
 
         pendingExpenses.forEach(e => {
-            if (e.type === 'direct' && e.split_with) {
+            if (e.split_with) {
                 if (e.paid_by === user.id) balance += e.amount
                 if (e.split_with === user.id) balance -= e.amount
             } else {
+                // Legacy group split
                 if (e.paid_by === user.id) balance += e.amount
                 balance -= (e.amount / roommatesCount)
             }
@@ -199,13 +243,10 @@ export default function Debts() {
                                         </div>
                                         <div className="text-right flex flex-col items-end gap-2">
                                             <span className="font-bold text-emerald-600">₺{calculateOthersShareOwedToMe(e).toFixed(2)}</span>
-                                            <button
-                                                onClick={() => markAsPaid(e.id)}
-                                                className="text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg hover:bg-emerald-200 transition-colors flex items-center gap-1.5"
-                                            >
-                                                <CheckCircle className="w-3.5 h-3.5" />
-                                                Confirm Paid
-                                            </button>
+                                            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-3 py-1.5 flex items-center gap-1.5 opacity-50 cursor-not-allowed">
+                                                <History className="w-3.5 h-3.5" />
+                                                Waiting for Debtor
+                                            </div>
                                         </div>
                                     </div>
                                 ))}

@@ -56,10 +56,11 @@ export default function Dashboard() {
             if (expenses && roommatesCount) {
                 let myBalance = 0
                 expenses.forEach(e => {
-                    if (e.type === 'direct' && e.split_with) {
+                    if (e.split_with) {
                         if (e.paid_by === user.id) myBalance += e.amount
                         if (e.split_with === user.id) myBalance -= e.amount
                     } else {
+                        // Legacy group split logic
                         if (e.paid_by === user.id) myBalance += e.amount
                         myBalance -= (e.amount / roommatesCount)
                     }
