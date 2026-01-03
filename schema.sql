@@ -43,7 +43,8 @@ create table public.expenses (
   paid_by uuid references public.profiles(id) not null,
   room_id uuid references public.rooms(id) not null,
   split_with uuid references public.profiles(id),
-  type text default 'group'
+  type text default 'group',
+  status text default 'pending'
 );
 
 

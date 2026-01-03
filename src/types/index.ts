@@ -30,5 +30,6 @@ export type Expense = {
     created_at: string
     split_with?: string | null // If null, split with everyone. If present, split with this user only.
     type?: 'group' | 'direct'
+    status?: 'pending' | 'paid'
 }
 

@@ -62,15 +62,78 @@ export default function Add() {
         if (!room?.id || !user) return
         setLoading(true)
 
+        const expenseAmount = parseFloat(amount)
+
+        // 1. Fetch current balances of everyone in the room
+        const { data: allExpenses } = await supabase
+            .from('expenses')
+            .select('*')
+            .eq('room_id', room.id)
+            .eq('status', 'pending') // Only pending expenses count towards debt limit
+
+        const { data: profiles } = await supabase
+            .from('profiles')
+            .select('id, username')
+            .eq('room_id', room.id)
+
+        if (allExpenses && profiles) {
+            const roommatesCount = profiles.length
+            const balances: Record<string, number> = {}
+            profiles.forEach(p => balances[p.id] = 0)
+
+            allExpenses.forEach(exp => {
+                if (exp.type === 'direct' && exp.split_with) {
+                    balances[exp.paid_by] += exp.amount
+                    balances[exp.split_with] -= exp.amount
+                } else {
+                    balances[exp.paid_by] += exp.amount
+                    profiles.forEach(p => {
+                        balances[p.id] -= (exp.amount / roommatesCount)
+                    })
+                }
+            })
+
+            // 2. Check if the new expense would push anyone over the 5000 TL limit
+            const limit = 5000
+            let limitExceeded = false
+            let exceededUser = ''
+
+            if (splitType === 'direct') {
+                const newBalance = balances[splitWith] - expenseAmount
+                if (newBalance < -limit) {
+                    limitExceeded = true
+                    exceededUser = profiles.find(p => p.id === splitWith)?.username || 'Roommate'
+                }
+            } else {
+                const share = expenseAmount / roommatesCount
+                for (const p of profiles) {
+                    if (p.id === user.id) continue // The one who pays doesn't increase their debt
+                    const newBalance = balances[p.id] - share
+                    if (newBalance < -limit) {
+                        limitExceeded = true
+                        exceededUser = p.username || 'Roommate'
+                        break
+                    }
+                }
+            }
+
+            if (limitExceeded) {
+                alert(`Cannot add expense: ${exceededUser}'s debt would exceed ₺${limit}. Please settle existing debts first.`)
+                setLoading(false)
+                return
+            }
+        }
+
         const { error } = await supabase
             .from('expenses')
             .insert({
                 description: title,
-                amount: parseFloat(amount),
+                amount: expenseAmount,
                 paid_by: user.id,
                 room_id: room.id,
                 split_with: splitType === 'direct' ? splitWith : null,
-                type: splitType
+                type: splitType,
+                status: 'pending'
             })
 
         if (error) {

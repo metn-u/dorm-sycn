@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import { Chore, Profile } from '../types'
 import TaskItem from '../components/TaskItem'
+import { Clock } from 'lucide-react'
 
 export default function Dashboard() {
     const { room } = useRoom()
@@ -39,11 +40,12 @@ export default function Dashboard() {
 
             setUserProfile(profile)
 
-            // Fetch Expenses to calculate balance
+            // Fetch Expenses to calculate balance (Only pending ones represent current debt)
             const { data: expenses } = await supabase
                 .from('expenses')
                 .select('*')
                 .eq('room_id', room.id)
+                .eq('status', 'pending')
 
             // Fetch number of roommates to split expenses
             const { count: roommatesCount } = await supabase
@@ -130,6 +132,18 @@ export default function Dashboard() {
                         <div className="flex items-center justify-between">
                             <h3 className="font-bold text-slate-700">My Pending Tasks</h3>
                         </div>
+
+                        {balance < -4000 && (
+                            <div className="bg-rose-50 border border-rose-100 p-4 rounded-xl flex items-start gap-3">
+                                <div className="p-2 bg-rose-100 text-rose-600 rounded-lg">
+                                    <Clock className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-bold text-rose-800">High Debt Warning!</p>
+                                    <p className="text-xs text-rose-600 mt-0.5">Your debt is approaching the ₺5000 limit. Please settle up soon.</p>
+                                </div>
+                            </div>
+                        )}
 
                         <div className="space-y-3">
                             {pendingTasks.length === 0 ? (

@@ -9,6 +9,7 @@ import Expenses from './pages/Expenses'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
 import RoomSetup from './pages/RoomSetup'
+import Debts from './pages/Debts'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const { session, loading, profile } = useAuth()
@@ -53,6 +54,7 @@ function App() {
                             <Route path="tasks" element={<Tasks />} />
                             <Route path="add" element={<Add />} />
                             <Route path="expenses" element={<Expenses />} />
+                            <Route path="debts" element={<Debts />} />
                             <Route path="profile" element={<Profile />} />
                         </Route>
                     </Routes>
