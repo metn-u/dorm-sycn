@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useRoom } from '../contexts/RoomContext'
-import { User, LogOut, Settings, Copy, Check } from 'lucide-react'
+import { Profile } from '../types'
+import { User, LogOut, Settings, Copy, Check, Users, UserMinus } from 'lucide-react'
 
 export default function ProfilePage() {
     const { user, profile, signOut } = useAuth()
@@ -11,11 +12,24 @@ export default function ProfilePage() {
     const [username, setUsername] = useState(profile?.username || '')
     const [loading, setLoading] = useState(false)
     const [copied, setCopied] = useState(false)
+    const [roommates, setRoommates] = useState<Profile[]>([])
 
     // Update local state when profile loads
     useEffect(() => {
         if (profile) setUsername(profile.username || '')
-    }, [profile])
+        if (room?.id) {
+            fetchRoommates()
+        }
+    }, [profile, room?.id])
+
+    const fetchRoommates = async () => {
+        if (!room?.id) return
+        const { data } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('room_id', room.id)
+        setRoommates(data || [])
+    }
 
 
     const updateProfile = async (e: React.FormEvent) => {
@@ -56,6 +70,21 @@ export default function ProfilePage() {
 
         if (error) alert(error.message)
         else alert('Code updated: ' + newCode)
+    }
+
+    const removeRoommate = async (roommateId: string, roommateName: string) => {
+        if (!confirm(`Are you sure you want to remove ${roommateName} from the room?`)) return
+
+        const { error } = await supabase
+            .from('profiles')
+            .update({ room_id: null })
+            .eq('id', roommateId)
+
+        if (error) {
+            alert(error.message)
+        } else {
+            setRoommates(prev => prev.filter(r => r.id !== roommateId))
+        }
     }
 
     return (
@@ -124,6 +153,50 @@ export default function ProfilePage() {
                             >
                                 Regenerate Invite Code
                             </button>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {room && (
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+                    <h3 className="font-bold text-slate-800 border-b border-slate-100 pb-2 flex items-center gap-2">
+                        <Users className="w-5 h-5 text-slate-400" />
+                        Roommates
+                    </h3>
+
+                    <div className="space-y-3">
+                        {roommates.length === 0 ? (
+                            <p className="text-center py-4 text-slate-400 text-sm italic">You are alone in this room</p>
+                        ) : (
+                            roommates.map(r => (
+                                <div key={r.id} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl group transition-all hover:bg-slate-100">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-400 shadow-sm">
+                                            <User className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-slate-700">{r.username || 'Roommate'}</p>
+                                            {r.id === room.created_by && (
+                                                <span className="text-[10px] bg-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded-full uppercase">Creator</span>
+                                            )}
+                                            {r.id === user?.id && (
+                                                <span className="text-[10px] bg-slate-200 text-slate-600 font-bold px-1.5 py-0.5 rounded-full uppercase ml-1">You</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {room.created_by === user?.id && r.id !== user?.id && (
+                                        <button
+                                            onClick={() => removeRoommate(r.id, r.username || 'Roommate')}
+                                            className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                                            title="Remove from room"
+                                        >
+                                            <UserMinus className="w-5 h-5" />
+                                        </button>
+                                    )}
+                                </div>
+                            ))
                         )}
                     </div>
                 </div>

@@ -53,6 +53,7 @@ function App() {
                             <Route path="tasks" element={<Tasks />} />
                             <Route path="add" element={<Add />} />
                             <Route path="debts" element={<Debts />} />
+                            <Route path="expenses" element={<Navigate to="/debts" replace />} />
                             <Route path="profile" element={<Profile />} />
                         </Route>
                     </Routes>
