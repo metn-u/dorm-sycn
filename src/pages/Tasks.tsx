@@ -67,37 +67,46 @@ export default function Tasks() {
     })
 
     return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-slate-800">Tasks</h2>
-                <div className="flex bg-slate-100 p-1 rounded-xl">
-                    <button
-                        onClick={() => setFilter('my')}
-                        className={cn(
-                            "px-4 py-1.5 text-sm font-medium rounded-lg transition-all",
-                            filter === 'my' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                        )}
-                    >
-                        My Tasks
-                    </button>
-                    <button
-                        onClick={() => setFilter('all')}
-                        className={cn(
-                            "px-4 py-1.5 text-sm font-medium rounded-lg transition-all",
-                            filter === 'all' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                        )}
-                    >
-                        All Tasks
-                    </button>
+        <div className="space-y-10">
+            <header className="flex items-end justify-between border-b-4 border-black pb-4">
+                <div className="flex flex-col gap-1">
+                    <h2 className="text-4xl font-black text-black uppercase tracking-tighter italic">Task Board</h2>
+                    <p className="text-black/60 text-xs font-black uppercase tracking-widest">Coordinating roommate life</p>
                 </div>
+                <div className="bg-yellow-400 neo-border px-4 py-1.5 font-black uppercase text-xs tracking-widest shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    {tasks.length} Total
+                </div>
+            </header>
+
+            <div className="flex gap-4 p-1 bg-black/5 neo-border">
+                <button
+                    onClick={() => setFilter('my')}
+                    className={cn(
+                        "flex-1 py-3 font-black uppercase tracking-widest text-[10px] transition-all",
+                        filter === 'my' ? "bg-black text-white" : "text-black hover:bg-black/10"
+                    )}
+                >
+                    Assigned To Me
+                </button>
+                <button
+                    onClick={() => setFilter('all')}
+                    className={cn(
+                        "flex-1 py-3 font-black uppercase tracking-widest text-[10px] transition-all",
+                        filter === 'all' ? "bg-black text-white" : "text-black hover:bg-black/10"
+                    )}
+                >
+                    Whole Room
+                </button>
             </div>
 
-            <div className="space-y-3">
+            <div className="grid gap-6">
                 {loading ? (
-                    <p className="text-center text-slate-400 py-8">Loading tasks...</p>
+                    [1, 2, 3].map(i => (
+                        <div key={i} className="h-24 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl animate-pulse"></div>
+                    ))
                 ) : filteredTasks.length === 0 ? (
-                    <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-slate-200">
-                        <p className="text-slate-500">No tasks found</p>
+                    <div className="text-center py-20 neo-card bg-white border-dashed border-4 border-black/10">
+                        <p className="text-black/30 text-2xl font-black uppercase tracking-tighter italic">Empty board! 😴</p>
                     </div>
                 ) : (
                     filteredTasks.map(task => (

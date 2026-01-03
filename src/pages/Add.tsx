@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useRoom } from '../contexts/RoomContext'
 import { useAuth } from '../contexts/AuthContext'
 import { Profile } from '../types'
-import { Calendar } from 'lucide-react'
+import { cn } from '../lib/utils'
 
 export default function Add() {
     const { room } = useRoom()
@@ -186,168 +186,174 @@ export default function Add() {
     }
 
     return (
-        <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-slate-800">New Item</h2>
+        <div className="space-y-10">
+            <h2 className="text-4xl font-black text-black uppercase tracking-tighter italic border-b-4 border-black pb-4">New Entry</h2>
 
-            <div className="flex gap-4 border-b border-slate-200">
+            <div className="flex gap-4">
                 <button
                     onClick={() => setActiveTab('chore')}
-                    className={`pb-3 px-1 font-medium text-sm transition-colors relative ${activeTab === 'chore' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-800'
-                        }`}
-                >
-                    New Chore
-                    {activeTab === 'chore' && (
-                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full" />
+                    className={cn(
+                        "flex-1 py-4 neo-border font-black uppercase tracking-tight transition-all",
+                        activeTab === 'chore' ? "bg-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-1 -translate-y-1" : "bg-white"
                     )}
+                >
+                    New Task
                 </button>
                 <button
                     onClick={() => setActiveTab('expense')}
-                    className={`pb-3 px-1 font-medium text-sm transition-colors relative ${activeTab === 'expense' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-800'
-                        }`}
-                >
-                    New Expense
-                    {activeTab === 'expense' && (
-                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full" />
+                    className={cn(
+                        "flex-1 py-4 neo-border font-black uppercase tracking-tight transition-all",
+                        activeTab === 'expense' ? "bg-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-1 -translate-y-1" : "bg-white"
                     )}
+                >
+                    New Bill
                 </button>
             </div>
 
-            {activeTab === 'chore' ? (
-                <form onSubmit={createChore} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-700">Task Title</label>
-                        <input
-                            type="text"
-                            required
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Take out trash"
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-700">Assign To</label>
-                            <select
+            <div className="neo-card p-8 bg-white">
+                {activeTab === 'chore' ? (
+                    <form onSubmit={createChore} className="space-y-8">
+                        <div className="space-y-3">
+                            <label className="text-xs font-black uppercase tracking-widest text-black/60">Task Description</label>
+                            <input
+                                type="text"
                                 required
-                                value={assignee}
-                                onChange={(e) => setAssignee(e.target.value)}
-                                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
-                            >
-                                <option value="">Select...</option>
-                                {roommates.map(p => (
-                                    <option key={p.id} value={p.id}>{p.username}</option>
-                                ))}
-                            </select>
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="E.g. Take out the trash"
+                                className="w-full neo-input"
+                            />
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-700">Due Date</label>
-                            <div className="relative">
-                                <input
-                                    type="date"
+                        <div className="grid grid-cols-2 gap-8">
+                            <div className="space-y-3">
+                                <label className="text-xs font-black uppercase tracking-widest text-black/60">Assign To</label>
+                                <select
                                     required
-                                    value={dueDate}
-                                    onChange={(e) => setDueDate(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                />
-                                <Calendar className="absolute right-3 top-3.5 w-5 h-5 text-slate-400 pointer-events-none" />
+                                    value={assignee}
+                                    onChange={(e) => setAssignee(e.target.value)}
+                                    className="w-full neo-input appearance-none bg-white"
+                                >
+                                    <option value="">Select...</option>
+                                    {roommates.map(p => (
+                                        <option key={p.id} value={p.id}>{p.username}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="space-y-3">
+                                <label className="text-xs font-black uppercase tracking-widest text-black/60">Due Date</label>
+                                <div className="relative">
+                                    <input
+                                        type="date"
+                                        required
+                                        value={dueDate}
+                                        onChange={(e) => setDueDate(e.target.value)}
+                                        className="w-full neo-input"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <button
-                        disabled={loading}
-                        className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
-                    >
-                        {loading ? 'Creating...' : 'Create Task'}
-                    </button>
-                </form>
-            ) : (
-                <form onSubmit={createExpense} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-700">Description</label>
-                        <input
-                            type="text"
-                            required
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Groceries, Internet Bill..."
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-700">Amount (TL)</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            required
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            placeholder="0.00"
-                            className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        />
-                    </div>
-
-                    <div className="space-y-4">
-                        <label className="text-sm font-medium text-slate-700">Split Method</label>
-                        <div className="flex gap-2 p-1 bg-slate-100 rounded-xl">
-                            <button
-                                type="button"
-                                onClick={() => setSplitType('group')}
-                                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${splitType === 'group' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}
-                            >
-                                Everyone
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setSplitType('direct')}
-                                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${splitType === 'direct' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}
-                            >
-                                Individual
-                            </button>
+                        <button
+                            disabled={loading}
+                            className="w-full neo-button bg-black text-white hover:bg-yellow-400 hover:text-black transition-colors"
+                        >
+                            {loading ? 'Processing...' : 'Deploy Task'}
+                        </button>
+                    </form>
+                ) : (
+                    <form onSubmit={createExpense} className="space-y-8">
+                        <div className="space-y-3">
+                            <label className="text-xs font-black uppercase tracking-widest text-black/60">Expense Name</label>
+                            <input
+                                type="text"
+                                required
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="E.g. Electricity Bill"
+                                className="w-full neo-input"
+                            />
                         </div>
-                    </div>
 
-                    {splitType === 'direct' && (
+                        <div className="space-y-3">
+                            <label className="text-xs font-black uppercase tracking-widest text-black/60">Amount (TL)</label>
+                            <div className="relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-xl">₺</span>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    required
+                                    value={amount}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    placeholder="0.00"
+                                    className="w-full neo-input pl-10"
+                                />
+                            </div>
+                        </div>
+
                         <div className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-slate-700">Who owes you?</label>
+                            <label className="text-xs font-black uppercase tracking-widest text-black/60">Distribution</label>
+                            <div className="flex gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setSplitType('group')}
+                                    className={cn(
+                                        "flex-1 py-3 neo-border font-black uppercase text-xs transition-all",
+                                        splitType === 'group' ? "bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -translate-x-0.5 -translate-y-0.5" : "bg-white"
+                                    )}
+                                >
+                                    Divide Equally
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setSplitType('direct')}
+                                    className={cn(
+                                        "flex-1 py-3 neo-border font-black uppercase text-xs transition-all",
+                                        splitType === 'direct' ? "bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -translate-x-0.5 -translate-y-0.5" : "bg-white"
+                                    )}
+                                >
+                                    Target person
+                                </button>
+                            </div>
+                        </div>
+
+                        {splitType === 'direct' && (
+                            <div className="space-y-3 animate-[slideIn_0.2s_ease-out]">
+                                <label className="text-xs font-black uppercase tracking-widest text-black/60">Who's paying?</label>
                                 <select
                                     required
                                     value={splitWith}
                                     onChange={(e) => setSplitWith(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                                    className="w-full neo-input bg-white"
                                 >
-                                    <option value="">Select teammate...</option>
+                                    <option value="">Choose your victim...</option>
                                     {roommates.filter(r => r.id !== user?.id).map(p => (
                                         <option key={p.id} value={p.id}>{p.username}</option>
                                     ))}
                                 </select>
                             </div>
+                        )}
+
+                        <div className="p-5 bg-black text-yellow-400 neo-border italic">
+                            <p className="font-black uppercase tracking-tight text-center">
+                                {splitType === 'group'
+                                    ? `Total: ₺${amount || '0'} • Per person: ₺${(parseFloat(amount || '0') / (roommates.length || 1)).toFixed(0)}`
+                                    : `Debt: Targeted roommate will owe you the full ₺${amount || '0'}`
+                                }
+                            </p>
                         </div>
-                    )}
-
-                    <div className="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
-                        <p className="text-sm text-indigo-700 text-center font-medium">
-                            {splitType === 'group'
-                                ? `Total: ₺${amount || '0'} • Each pays: ₺${(parseFloat(amount || '0') / (roommates.length || 1)).toFixed(2)}`
-                                : `Direct debt: The selected person will owe you the FULL amount (₺${amount || '0'})`
-                            }
-                        </p>
-                    </div>
 
 
-                    <button
-                        disabled={loading}
-                        className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
-                    >
-                        {loading ? 'Adding...' : 'Add Expense'}
-                    </button>
-                </form>
-            )}
+                        <button
+                            disabled={loading}
+                            className="w-full neo-button bg-black text-white hover:bg-yellow-400 hover:text-black transition-colors"
+                        >
+                            {loading ? 'Submitting...' : 'Register Expense'}
+                        </button>
+                    </form>
+                )}
+            </div>
         </div>
     )
 }

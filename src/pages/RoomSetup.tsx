@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { Users, Plus, ArrowRight } from 'lucide-react'
+import { cn } from '../lib/utils'
 
 export default function RoomSetup() {
     const [mode, setMode] = useState<'select' | 'create' | 'join'>('select')
@@ -117,110 +118,94 @@ export default function RoomSetup() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
-            <div className="w-full max-w-md space-y-8">
-                <div className="text-center">
-                    <h1 className="text-3xl font-bold text-slate-800">Setup Your Dorm</h1>
-                    <p className="text-slate-500 mt-2">Join an existing room or create a new one</p>
+        <div className="min-h-screen bg-[#FFFDF5] flex flex-col items-center justify-center p-6 font-['Outfit']">
+            <div className="w-full max-w-md space-y-12">
+                <div className="text-center space-y-4">
+                    <h1 className="text-5xl font-black text-black uppercase tracking-tighter italic leading-none">
+                        Room<span className="text-blue-500">Service</span>
+                    </h1>
+                    <p className="text-black/60 font-black uppercase tracking-widest text-[10px]">Initialize your living parameters</p>
+                    <div className="h-2 w-32 bg-black mx-auto shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"></div>
                 </div>
 
                 {mode === 'select' && (
-                    <div className="grid gap-4">
+                    <div className="grid gap-6">
                         <button
                             onClick={() => setMode('create')}
-                            className="flex items-center justify-between p-6 bg-white rounded-2xl shadow-sm border border-slate-100 hover:border-indigo-200 transition-all group"
+                            className="flex items-center justify-between p-8 bg-white transition-all neo-card group hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]"
                         >
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                                    <Plus className="w-6 h-6" />
+                            <div className="flex items-center gap-6">
+                                <div className="p-4 bg-yellow-400 neo-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-black group-hover:bg-black group-hover:text-yellow-400 transition-colors">
+                                    <Plus className="w-8 h-8" strokeWidth={4} />
                                 </div>
                                 <div className="text-left">
-                                    <h3 className="font-bold text-slate-800">Create New Room</h3>
-                                    <p className="text-sm text-slate-500">Start a fresh house</p>
+                                    <h3 className="font-black text-2xl text-black uppercase tracking-tighter italic">Found Room</h3>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-black/40 mt-1">Start a fresh squad</p>
                                 </div>
                             </div>
-                            <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-indigo-600" />
+                            <ArrowRight className="w-6 h-6 text-black/20 group-hover:text-black transition-colors" strokeWidth={3} />
                         </button>
 
                         <button
                             onClick={() => setMode('join')}
-                            className="flex items-center justify-between p-6 bg-white rounded-2xl shadow-sm border border-slate-100 hover:border-indigo-200 transition-all group"
+                            className="flex items-center justify-between p-8 bg-white transition-all neo-card group hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]"
                         >
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                                    <Users className="w-6 h-6" />
+                            <div className="flex items-center gap-6">
+                                <div className="p-4 bg-emerald-400 neo-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-black group-hover:bg-black group-hover:text-emerald-400 transition-colors">
+                                    <Users className="w-8 h-8" strokeWidth={4} />
                                 </div>
                                 <div className="text-left">
-                                    <h3 className="font-bold text-slate-800">Join Room</h3>
-                                    <p className="text-sm text-slate-500">Enter a code</p>
+                                    <h3 className="font-black text-2xl text-black uppercase tracking-tighter italic">Infiltrate</h3>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-black/40 mt-1">Join existing room</p>
                                 </div>
                             </div>
-                            <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-indigo-600" />
+                            <ArrowRight className="w-6 h-6 text-black/20 group-hover:text-black transition-colors" strokeWidth={3} />
                         </button>
                     </div>
                 )}
 
-                {mode === 'create' && (
-                    <form onSubmit={createRoom} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-700">Room Name</label>
-                            <input
-                                type="text"
-                                required
-                                value={roomName}
-                                onChange={(e) => setRoomName(e.target.value)}
-                                placeholder="e.g. The Penthouse"
-                                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            />
+                {(mode === 'create' || mode === 'join') && (
+                    <div className="neo-card p-10 bg-white relative overflow-visible">
+                        <div className="absolute -top-4 -right-4 py-2 px-6 bg-black text-white text-xs font-black uppercase tracking-widest shadow-[6px_6px_0px_0px_rgba(59,130,246,1)] rotate-3">
+                            {mode === 'create' ? 'CONSTRUCTION' : 'AUTHENTICATION'}
                         </div>
-                        <div className="flex gap-3">
-                            <button
-                                type="button"
-                                onClick={() => setMode('select')}
-                                className="flex-1 py-3 px-4 rounded-xl font-medium text-slate-600 hover:bg-slate-50"
-                            >
-                                Back
-                            </button>
-                            <button
-                                disabled={loading}
-                                className="flex-1 bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 disabled:opacity-50"
-                            >
-                                {loading ? 'Creating...' : 'Create Room'}
-                            </button>
-                        </div>
-                    </form>
-                )}
 
-                {mode === 'join' && (
-                    <form onSubmit={joinRoom} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-700">Invite Code</label>
-                            <input
-                                type="text"
-                                required
-                                value={roomCode}
-                                onChange={(e) => setRoomCode(e.target.value)}
-                                placeholder="e.g. A1B2C3"
-                                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase tracking-widest"
-                                maxLength={6}
-                            />
-                        </div>
-                        <div className="flex gap-3">
-                            <button
-                                type="button"
-                                onClick={() => setMode('select')}
-                                className="flex-1 py-3 px-4 rounded-xl font-medium text-slate-600 hover:bg-slate-50"
-                            >
-                                Back
-                            </button>
-                            <button
-                                disabled={loading}
-                                className="flex-1 bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 disabled:opacity-50"
-                            >
-                                {loading ? 'Joining...' : 'Join Room'}
-                            </button>
-                        </div>
-                    </form>
+                        <form onSubmit={mode === 'create' ? createRoom : joinRoom} className="space-y-8">
+                            <div className="space-y-3">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-black/60 px-1">
+                                    {mode === 'create' ? 'Household Name' : 'Infiltration Code'}
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={mode === 'create' ? roomName : roomCode}
+                                    onChange={(e) => mode === 'create' ? setRoomName(e.target.value) : setRoomCode(e.target.value)}
+                                    placeholder={mode === 'create' ? "e.g. THE VAULT" : "e.g. XJ99K0"}
+                                    className={cn(
+                                        "w-full neo-input",
+                                        mode === 'join' && "uppercase tracking-widest text-center text-2xl"
+                                    )}
+                                    maxLength={mode === 'join' ? 6 : 50}
+                                />
+                            </div>
+
+                            <div className="flex gap-4 pt-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setMode('select')}
+                                    className="flex-1 neo-button bg-white text-black hover:bg-slate-50 uppercase text-xs"
+                                >
+                                    Abort
+                                </button>
+                                <button
+                                    disabled={loading}
+                                    className="flex-2 neo-button bg-black text-white hover:bg-yellow-400 hover:text-black uppercase text-xs"
+                                >
+                                    {loading ? 'Processing...' : mode === 'create' ? 'Finalize Build' : 'Request Entry'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 )}
             </div>
         </div>

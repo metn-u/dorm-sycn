@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 import { Chore, Profile } from '../types'
 import TaskItem from '../components/TaskItem'
 import { Clock } from 'lucide-react'
+import { cn } from '../lib/utils'
 
 export default function Dashboard() {
     const { room } = useRoom()
@@ -94,62 +95,65 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-slate-800">Dashboard</h2>
-                <span className="text-sm text-slate-500 font-medium">{room?.name}</span>
+        <div className="space-y-10">
+            <div className="flex justify-between items-end border-b-4 border-black pb-4">
+                <h2 className="text-4xl font-black text-black uppercase tracking-tighter italic">Dashboard</h2>
+                <span className="text-sm bg-black text-white px-3 py-1 font-black uppercase tracking-widest leading-none mb-1">{room?.name}</span>
             </div>
 
             {loading ? (
                 <>
-                    <div className="grid grid-cols-2 gap-4 animate-pulse">
-                        <div className="h-24 bg-slate-100 rounded-xl"></div>
-                        <div className="h-24 bg-slate-100 rounded-xl"></div>
+                    <div className="grid grid-cols-2 gap-6">
+                        <div className="h-32 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl animate-pulse"></div>
+                        <div className="h-32 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl animate-pulse"></div>
                     </div>
-                    <div className="space-y-4 pt-4">
-                        <div className="h-6 w-32 bg-slate-100 rounded animate-pulse"></div>
-                        <div className="h-20 bg-slate-100 rounded-xl animate-pulse"></div>
-                        <div className="h-20 bg-slate-100 rounded-xl animate-pulse"></div>
+                    <div className="space-y-6 pt-6">
+                        <div className="h-8 w-48 bg-black/10 rounded animate-pulse"></div>
+                        <div className="h-24 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-xl animate-pulse"></div>
                     </div>
                 </>
             ) : (
                 <>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                            <p className="text-slate-500 text-sm">My Tasks</p>
-                            <p className="text-2xl font-bold text-indigo-600">
-                                {pendingTasks.length} Pending
+                    <div className="grid grid-cols-2 gap-6">
+                        <div className="neo-card p-6 bg-[#E0E7FF]">
+                            <p className="text-black text-xs font-black uppercase tracking-widest mb-2">My Tasks</p>
+                            <p className="text-4xl font-black text-black tracking-tighter">
+                                {pendingTasks.length} <span className="text-xl uppercase italic">Items</span>
                             </p>
                         </div>
-                        <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                            <p className="text-slate-500 text-sm">Balance</p>
-                            <p className={`text-2xl font-bold ${balance >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
-                                {balance >= 0 ? '+' : ''}₺{balance.toFixed(2)}
+                        <div className={cn(
+                            "neo-card p-6 transition-colors",
+                            balance >= 0 ? "bg-[#D1FAE5]" : "bg-[#FEE2E2]"
+                        )}>
+                            <p className="text-black text-xs font-black uppercase tracking-widest mb-2">Balance</p>
+                            <p className="text-4xl font-black text-black tracking-tighter leading-none">
+                                {balance >= 0 ? '+' : ''}₺{balance.toFixed(0)}
                             </p>
                         </div>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                         <div className="flex items-center justify-between">
-                            <h3 className="font-bold text-slate-700">My Pending Tasks</h3>
+                            <h3 className="text-2xl font-black text-black uppercase tracking-tight italic">My Pending Tasks</h3>
+                            <div className="h-1 flex-1 bg-black ml-4"></div>
                         </div>
 
                         {balance < -4000 && (
-                            <div className="bg-rose-50 border border-rose-100 p-4 rounded-xl flex items-start gap-3">
-                                <div className="p-2 bg-rose-100 text-rose-600 rounded-lg">
-                                    <Clock className="w-5 h-5" />
+                            <div className="bg-rose-400 neo-border p-5 flex items-start gap-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                <div className="p-2 bg-black text-white rounded-lg">
+                                    <Clock className="w-6 h-6" />
                                 </div>
-                                <div>
-                                    <p className="text-sm font-bold text-rose-800">High Debt Warning!</p>
-                                    <p className="text-xs text-rose-600 mt-0.5">Your debt is approaching the ₺5000 limit. Please settle up soon.</p>
+                                <div className="text-black">
+                                    <p className="text-lg font-black uppercase tracking-tight">High Debt Warning!</p>
+                                    <p className="text-sm font-bold mt-1">Your debt is approaching the ₺5000 limit. Settle up now or be shamed!</p>
                                 </div>
                             </div>
                         )}
 
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                             {pendingTasks.length === 0 ? (
-                                <div className="text-center py-8 bg-white rounded-2xl border border-dashed border-slate-200">
-                                    <p className="text-slate-500 text-sm">No pending tasks! 🎉</p>
+                                <div className="text-center py-12 neo-card bg-white border-dashed border-4 border-black/20">
+                                    <p className="text-black/40 text-xl font-black uppercase tracking-tighter italic">No pending tasks! 🎉</p>
                                 </div>
                             ) : (
                                 pendingTasks.map(task => (
