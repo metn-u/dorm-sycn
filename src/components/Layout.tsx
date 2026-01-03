@@ -1,5 +1,5 @@
 import { Outlet, useLocation, Link } from 'react-router-dom'
-import { Home, LayoutGrid, CheckSquare, Plus, Receipt, User, Clock } from 'lucide-react'
+import { Home, LayoutGrid, CheckSquare, Plus, Receipt, User } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { useRoom } from '../contexts/RoomContext'
 
@@ -11,8 +11,7 @@ export default function Layout() {
         { path: '/', icon: Home, label: 'Home' },
         { path: '/tasks', icon: CheckSquare, label: 'Tasks' },
         { path: '/add', icon: Plus, label: 'Add', primary: true },
-        { path: '/expenses', icon: Receipt, label: 'Money' },
-        { path: '/debts', icon: Clock, label: 'Debts' },
+        { path: '/debts', icon: Receipt, label: 'Debts' },
         { path: '/profile', icon: User, label: 'Profile' }
     ]
 

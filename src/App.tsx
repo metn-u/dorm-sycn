@@ -5,7 +5,6 @@ import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Tasks from './pages/Tasks'
 import Add from './pages/Add'
-import Expenses from './pages/Expenses'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
 import RoomSetup from './pages/RoomSetup'
@@ -53,7 +52,6 @@ function App() {
                             <Route index element={<Dashboard />} />
                             <Route path="tasks" element={<Tasks />} />
                             <Route path="add" element={<Add />} />
-                            <Route path="expenses" element={<Expenses />} />
                             <Route path="debts" element={<Debts />} />
                             <Route path="profile" element={<Profile />} />
                         </Route>
