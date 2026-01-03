@@ -1,0 +1,19 @@
+# Kütüphaneler (Sakın yükleme!)
+node_modules/
+dist/
+
+# Özel ayarlar ve Şifreler (Sakın yükleme!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# İşletim sistemi lüzumsuzları
+.DS_Store
+thumbs.db
+
+# Log dosyaları
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
