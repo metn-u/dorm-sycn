@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useRoom } from '../contexts/RoomContext'
 import { Profile } from '../types'
-import { User, LogOut, Settings, Copy, Check, Users, UserMinus } from 'lucide-react'
+import { User, LogOut, Settings, Copy, Check, Users, UserMinus, LayoutGrid } from 'lucide-react'
 
 export default function ProfilePage() {
     const { user, profile, signOut } = useAuth()
