@@ -187,14 +187,24 @@ export default function Add() {
 
     return (
         <div className="space-y-10">
-            <h2 className="text-4xl font-black text-black uppercase tracking-tighter italic border-b-4 border-black pb-4">New Entry</h2>
+            <header className="flex items-end justify-between pb-2 border-b border-slate-200">
+                <div className="flex flex-col gap-1">
+                    <h2 className="text-3xl font-bold text-slate-900 tracking-tight">New Entry</h2>
+                    <p className="text-slate-500 text-sm">Sync up with your roommates</p>
+                </div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-100 px-3 py-1.5 rounded-lg leading-none mb-1">
+                    {room?.name}
+                </span>
+            </header>
 
-            <div className="flex gap-4">
+            <div className="flex gap-2 p-1.5 bg-slate-100 rounded-[2rem] border border-slate-200 shadow-inner">
                 <button
                     onClick={() => setActiveTab('chore')}
                     className={cn(
-                        "flex-1 py-4 neo-border font-black uppercase tracking-tight transition-all",
-                        activeTab === 'chore' ? "bg-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-1 -translate-y-1" : "bg-white"
+                        "flex-1 py-3 rounded-[1.5rem] font-bold uppercase tracking-widest text-[10px] transition-all duration-300",
+                        activeTab === 'chore'
+                            ? "bg-white text-indigo-600 shadow-md"
+                            : "text-slate-500 hover:text-slate-700 hover:bg-white/50"
                     )}
                 >
                     New Task
@@ -202,84 +212,84 @@ export default function Add() {
                 <button
                     onClick={() => setActiveTab('expense')}
                     className={cn(
-                        "flex-1 py-4 neo-border font-black uppercase tracking-tight transition-all",
-                        activeTab === 'expense' ? "bg-yellow-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-1 -translate-y-1" : "bg-white"
+                        "flex-1 py-3 rounded-[1.5rem] font-bold uppercase tracking-widest text-[10px] transition-all duration-300",
+                        activeTab === 'expense'
+                            ? "bg-white text-indigo-600 shadow-md"
+                            : "text-slate-500 hover:text-slate-700 hover:bg-white/50"
                     )}
                 >
-                    New Bill
+                    New Expense
                 </button>
             </div>
 
-            <div className="neo-card p-8 bg-white">
+            <div className="bento-card">
                 {activeTab === 'chore' ? (
                     <form onSubmit={createChore} className="space-y-8">
-                        <div className="space-y-3">
-                            <label className="text-xs font-black uppercase tracking-widest text-black/60">Task Description</label>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Task Description</label>
                             <input
                                 type="text"
                                 required
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 placeholder="E.g. Take out the trash"
-                                className="w-full neo-input"
+                                className="w-full bento-input"
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-8">
-                            <div className="space-y-3">
-                                <label className="text-xs font-black uppercase tracking-widest text-black/60">Assign To</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Assign To</label>
                                 <select
                                     required
                                     value={assignee}
                                     onChange={(e) => setAssignee(e.target.value)}
-                                    className="w-full neo-input appearance-none bg-white"
+                                    className="w-full bento-input appearance-none bg-white"
                                 >
-                                    <option value="">Select...</option>
+                                    <option value="">Select teammate...</option>
                                     {roommates.map(p => (
                                         <option key={p.id} value={p.id}>{p.username}</option>
                                     ))}
                                 </select>
                             </div>
 
-                            <div className="space-y-3">
-                                <label className="text-xs font-black uppercase tracking-widest text-black/60">Due Date</label>
-                                <div className="relative">
-                                    <input
-                                        type="date"
-                                        required
-                                        value={dueDate}
-                                        onChange={(e) => setDueDate(e.target.value)}
-                                        className="w-full neo-input"
-                                    />
-                                </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Due Date</label>
+                                <input
+                                    type="date"
+                                    required
+                                    value={dueDate}
+                                    onChange={(e) => setDueDate(e.target.value)}
+                                    className="w-full bento-input"
+                                />
                             </div>
                         </div>
 
                         <button
                             disabled={loading}
-                            className="w-full neo-button bg-black text-white hover:bg-yellow-400 hover:text-black transition-colors"
+                            className="w-full bento-button-primary mt-4"
                         >
-                            {loading ? 'Processing...' : 'Deploy Task'}
+                            {loading ? 'Adding Task...' : 'Create Task'}
                         </button>
                     </form>
                 ) : (
                     <form onSubmit={createExpense} className="space-y-8">
-                        <div className="space-y-3">
-                            <label className="text-xs font-black uppercase tracking-widest text-black/60">Expense Name</label>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Expense Name</label>
                             <input
                                 type="text"
                                 required
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 placeholder="E.g. Electricity Bill"
-                                className="w-full neo-input"
+                                className="w-full bento-input"
                             />
                         </div>
 
-                        <div className="space-y-3">
-                            <label className="text-xs font-black uppercase tracking-widest text-black/60">Amount (TL)</label>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Amount (TL)</label>
                             <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-xl">₺</span>
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">₺</span>
                                 <input
                                     type="number"
                                     step="0.01"
@@ -287,20 +297,20 @@ export default function Add() {
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
                                     placeholder="0.00"
-                                    className="w-full neo-input pl-10"
+                                    className="w-full bento-input pl-10"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-xs font-black uppercase tracking-widest text-black/60">Distribution</label>
-                            <div className="flex gap-4">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Distribution</label>
+                            <div className="flex gap-3 p-1 bg-slate-50 rounded-2xl border border-slate-100">
                                 <button
                                     type="button"
                                     onClick={() => setSplitType('group')}
                                     className={cn(
-                                        "flex-1 py-3 neo-border font-black uppercase text-xs transition-all",
-                                        splitType === 'group' ? "bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -translate-x-0.5 -translate-y-0.5" : "bg-white"
+                                        "flex-1 py-3 rounded-xl font-bold uppercase text-[9px] tracking-widest transition-all duration-200",
+                                        splitType === 'group' ? "bg-white text-indigo-600 shadow-sm border border-slate-100" : "text-slate-400 hover:text-slate-600"
                                     )}
                                 >
                                     Divide Equally
@@ -309,25 +319,25 @@ export default function Add() {
                                     type="button"
                                     onClick={() => setSplitType('direct')}
                                     className={cn(
-                                        "flex-1 py-3 neo-border font-black uppercase text-xs transition-all",
-                                        splitType === 'direct' ? "bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -translate-x-0.5 -translate-y-0.5" : "bg-white"
+                                        "flex-1 py-3 rounded-xl font-bold uppercase text-[9px] tracking-widest transition-all duration-200",
+                                        splitType === 'direct' ? "bg-white text-indigo-600 shadow-sm border border-slate-100" : "text-slate-400 hover:text-slate-600"
                                     )}
                                 >
-                                    Target person
+                                    Specific Person
                                 </button>
                             </div>
                         </div>
 
                         {splitType === 'direct' && (
-                            <div className="space-y-3 animate-[slideIn_0.2s_ease-out]">
-                                <label className="text-xs font-black uppercase tracking-widest text-black/60">Who's paying?</label>
+                            <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Who is responsible?</label>
                                 <select
                                     required
                                     value={splitWith}
                                     onChange={(e) => setSplitWith(e.target.value)}
-                                    className="w-full neo-input bg-white"
+                                    className="w-full bento-input bg-white appearance-none"
                                 >
-                                    <option value="">Choose your victim...</option>
+                                    <option value="">Select roommate...</option>
                                     {roommates.filter(r => r.id !== user?.id).map(p => (
                                         <option key={p.id} value={p.id}>{p.username}</option>
                                     ))}
@@ -335,11 +345,11 @@ export default function Add() {
                             </div>
                         )}
 
-                        <div className="p-5 bg-black text-yellow-400 neo-border italic">
-                            <p className="font-black uppercase tracking-tight text-center">
+                        <div className="p-5 bg-indigo-50/50 rounded-2xl border border-indigo-100 text-indigo-700">
+                            <p className="text-sm font-semibold tracking-tight text-center italic">
                                 {splitType === 'group'
-                                    ? `Total: ₺${amount || '0'} • Per person: ₺${(parseFloat(amount || '0') / (roommates.length || 1)).toFixed(0)}`
-                                    : `Debt: Targeted roommate will owe you the full ₺${amount || '0'}`
+                                    ? `Total: ₺${amount || '0'} • Each pays: ₺${(parseFloat(amount || '0') / (roommates.length || 1)).toFixed(0)}`
+                                    : `Direct: One roommate will owe ₺${amount || '0'} to you.`
                                 }
                             </p>
                         </div>
@@ -347,9 +357,9 @@ export default function Add() {
 
                         <button
                             disabled={loading}
-                            className="w-full neo-button bg-black text-white hover:bg-yellow-400 hover:text-black transition-colors"
+                            className="w-full bento-button-primary mt-4"
                         >
-                            {loading ? 'Submitting...' : 'Register Expense'}
+                            {loading ? 'Processing...' : 'Register Expense'}
                         </button>
                     </form>
                 )}

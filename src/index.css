@@ -20,6 +20,14 @@
     @apply bg-indigo-600 text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-200 hover:bg-indigo-700 active:scale-95 shadow-sm;
   }
 
+  .bento-button-secondary {
+    @apply bg-white text-slate-700 px-6 py-3 rounded-2xl font-semibold border border-slate-200 transition-all duration-200 hover:bg-slate-50 active:scale-95 shadow-sm;
+  }
+
+  .bento-input {
+    @apply bg-white border border-slate-200 px-4 py-3 rounded-2xl font-medium focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 transition-all text-slate-900 placeholder:text-slate-400;
+  }
+
   .neo-border {
     @apply border-2 border-black md:border-4;
   }
