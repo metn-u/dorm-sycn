@@ -107,3 +107,31 @@ $$ language plpgsql security definer;
 create or replace trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- 8. Create Events Table
+create table public.events (
+  id uuid default uuid_generate_v4() primary key,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  room_id uuid references public.rooms(id) not null,
+  created_by uuid references public.profiles(id) not null,
+  title text not null,
+  type text not null check (type in ('exam', 'event', 'away', 'other')),
+  start_date timestamp with time zone not null,
+  end_date timestamp with time zone not null,
+  description text
+);
+
+alter table public.events enable row level security;
+
+create policy "Auth users can view events" 
+on public.events for select to authenticated using ( true );
+
+create policy "Auth users can insert events" 
+on public.events for insert to authenticated with check ( true );
+
+create policy "Auth users can update events" 
+on public.events for update to authenticated using ( true );
+
+create policy "Auth users can delete events" 
+on public.events for delete to authenticated using ( true );
+

@@ -299,8 +299,8 @@ export default function Calendar() {
                                                     className={cn(
                                                         "relative h-full px-2 flex items-center justify-center overflow-hidden transition-all group/event text-center",
                                                         event.type === 'exam' ? "bg-amber-100/80 text-amber-800 border-l-4 border-amber-400 dark:bg-amber-900/40 dark:text-amber-200 dark:border-amber-600" :
-                                                            event.type === 'visitor' ? "bg-indigo-100/80 text-indigo-800 border-l-4 border-indigo-400 dark:bg-indigo-900/40 dark:text-indigo-200 dark:border-indigo-600" :
-                                                                event.type === 'quiet_hour' ? "bg-rose-100/80 text-rose-800 border-l-4 border-rose-400 dark:bg-rose-900/40 dark:text-rose-200 dark:border-rose-600" :
+                                                            event.type === 'event' ? "bg-indigo-100/80 text-indigo-800 border-l-4 border-indigo-400 dark:bg-indigo-900/40 dark:text-indigo-200 dark:border-indigo-600" :
+                                                                event.type === 'away' ? "bg-rose-100/80 text-rose-800 border-l-4 border-rose-400 dark:bg-rose-900/40 dark:text-rose-200 dark:border-rose-600" :
                                                                     "bg-slate-100/80 text-slate-800 border-l-4 border-slate-400 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-500",
                                                         isEventStart ? "rounded-r-md ml-0.5" : "-ml-px",
                                                         isSameDay(parseISO(event.end_date), week[endColIdx]) ? "rounded-r-md mr-0.5" : ""
@@ -355,11 +355,11 @@ export default function Calendar() {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                     <div className="w-3 h-3 rounded-full bg-indigo-400" />
-                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Visitors</span>
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Events</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                     <div className="w-3 h-3 rounded-full bg-rose-400" />
-                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Quiet Hours</span>
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Away from Dorm</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                     <div className="w-3 h-3 rounded-full bg-emerald-400" />
@@ -391,8 +391,8 @@ export default function Calendar() {
                                     className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 transition-all font-medium appearance-none cursor-pointer"
                                 >
                                     <option value="exam">🎓 Exam</option>
-                                    <option value="visitor">👥 Visitor</option>
-                                    <option value="quiet_hour">🔇 Quiet Hour</option>
+                                    <option value="event">📅 Event</option>
+                                    <option value="away">🏠 Away from Dorm</option>
                                     <option value="other">✨ Other</option>
                                 </select>
                             </div>

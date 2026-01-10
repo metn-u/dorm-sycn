@@ -46,7 +46,7 @@ export type CalendarEvent = {
     room_id: string
     created_by: string
     title: string
-    type: 'exam' | 'visitor' | 'quiet_hour' | 'other'
+    type: 'exam' | 'event' | 'away' | 'other'
     start_date: string
     end_date: string
     description: string | null
