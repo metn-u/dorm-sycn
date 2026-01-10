@@ -118,57 +118,57 @@ export default function RoomSetup() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 font-sans">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6 font-sans transition-colors duration-500">
             <div className="w-full max-w-md space-y-12">
                 <div className="text-center space-y-3">
-                    <div className="inline-flex p-3 bg-indigo-50 rounded-[1.5rem] text-indigo-600 mb-2">
+                    <div className="inline-flex p-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-[1.5rem] text-indigo-600 dark:text-indigo-400 mb-2">
                         <LayoutGrid className="w-10 h-10" />
                     </div>
-                    <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
+                    <h1 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
                         Room Setup
                     </h1>
-                    <p className="text-slate-500 text-sm font-medium">Initialize your living parameters</p>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Initialize your living parameters</p>
                 </div>
 
                 {mode === 'select' && (
                     <div className="grid gap-6">
                         <button
                             onClick={() => setMode('create')}
-                            className="flex items-center justify-between p-8 bg-white transition-all bento-card group hover:-translate-y-2"
+                            className="flex items-center justify-between p-8 bg-white dark:bg-slate-900 transition-all bento-card group hover:-translate-y-2"
                         >
                             <div className="flex items-center gap-6">
-                                <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-2xl text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                                <div className="p-4 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 dark:group-hover:bg-indigo-500 group-hover:text-white transition-colors duration-300">
                                     <Plus className="w-8 h-8" strokeWidth={2.5} />
                                 </div>
                                 <div className="text-left">
-                                    <h3 className="font-bold text-2xl text-slate-900 tracking-tight">Found Room</h3>
+                                    <h3 className="font-bold text-2xl text-slate-900 dark:text-white tracking-tight">Found Room</h3>
                                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Start a fresh squad</p>
                                 </div>
                             </div>
-                            <ArrowRight className="w-6 h-6 text-slate-200 group-hover:text-indigo-600 transition-colors" strokeWidth={2.5} />
+                            <ArrowRight className="w-6 h-6 text-slate-200 dark:text-slate-800 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" strokeWidth={2.5} />
                         </button>
 
                         <button
                             onClick={() => setMode('join')}
-                            className="flex items-center justify-between p-8 bg-white transition-all bento-card group hover:-translate-y-2"
+                            className="flex items-center justify-between p-8 bg-white dark:bg-slate-900 transition-all bento-card group hover:-translate-y-2"
                         >
                             <div className="flex items-center gap-6">
-                                <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                                <div className="p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-600 dark:group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
                                     <Users className="w-8 h-8" strokeWidth={2.5} />
                                 </div>
                                 <div className="text-left">
-                                    <h3 className="font-bold text-2xl text-slate-900 tracking-tight">Infiltrate</h3>
+                                    <h3 className="font-bold text-2xl text-slate-900 dark:text-white tracking-tight">Infiltrate</h3>
                                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Join existing room</p>
                                 </div>
                             </div>
-                            <ArrowRight className="w-6 h-6 text-slate-200 group-hover:text-emerald-600 transition-colors" strokeWidth={2.5} />
+                            <ArrowRight className="w-6 h-6 text-slate-200 dark:text-slate-800 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors" strokeWidth={2.5} />
                         </button>
                     </div>
                 )}
 
                 {(mode === 'create' || mode === 'join') && (
                     <div className="bento-card !p-10 relative overflow-visible">
-                        <div className="absolute -top-4 right-6 py-2 px-6 bg-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg shadow-indigo-100">
+                        <div className="absolute -top-4 right-6 py-2 px-6 bg-indigo-600 dark:bg-indigo-500 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg shadow-indigo-100 dark:shadow-indigo-950/20">
                             {mode === 'create' ? 'Construction' : 'Authentication'}
                         </div>
 

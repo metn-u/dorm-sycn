@@ -51,25 +51,27 @@ export default function Login() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col justify-center p-6 font-sans">
-            <div className="w-full max-w-sm mx-auto space-y-10">
-                <div className="text-center space-y-2">
-                    <div className="inline-flex p-3 bg-indigo-50 rounded-[1.5rem] text-indigo-600 mb-2">
-                        <LayoutGrid className="w-8 h-8" />
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6 font-sans transition-colors duration-500">
+            <div className="w-full max-w-md space-y-12">
+                <div className="text-center space-y-3">
+                    <div className="inline-flex p-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-[1.5rem] text-indigo-600 dark:text-indigo-400 mb-2">
+                        <LayoutGrid className="w-10 h-10" />
                     </div>
-                    <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
-                        DormSync
+                    <h1 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
+                        Room Setup
                     </h1>
-                    <p className="text-slate-500 text-sm font-medium">Roommate Coordination Hub</p>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Initialize your living parameters</p>
                 </div>
 
                 <div className="bento-card space-y-10 !p-10">
-                    <div className="flex gap-2 p-1 bg-slate-100 rounded-2xl border border-slate-200">
+                    <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-inner">
                         <button
                             onClick={() => setMode('signin')}
                             className={cn(
                                 "flex-1 py-2.5 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all duration-300",
-                                mode === 'signin' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700 hover:bg-white/50"
+                                mode === 'signin'
+                                    ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                                    : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/50"
                             )}
                         >
                             Sign In
@@ -78,7 +80,9 @@ export default function Login() {
                             onClick={() => setMode('signup')}
                             className={cn(
                                 "flex-1 py-2.5 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all duration-300",
-                                mode === 'signup' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700 hover:bg-white/50"
+                                mode === 'signup'
+                                    ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                                    : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/50"
                             )}
                         >
                             Join Up

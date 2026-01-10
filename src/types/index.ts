@@ -33,3 +33,21 @@ export type Expense = {
     status?: 'pending' | 'paid'
 }
 
+export type Announcement = {
+    id: string
+    room_id: string
+    created_by: string
+    content: string
+    created_at: string
+}
+
+export type CalendarEvent = {
+    id: string
+    room_id: string
+    created_by: string
+    title: string
+    type: 'exam' | 'visitor' | 'quiet_hour' | 'other'
+    start_date: string
+    end_date: string
+    description: string | null
+}

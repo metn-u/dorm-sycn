@@ -69,24 +69,24 @@ export default function Tasks() {
 
     return (
         <div className="space-y-10">
-            <header className="flex items-end justify-between pb-2 border-b border-slate-200">
+            <header className="flex items-end justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex flex-col gap-1">
-                    <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Task Board</h2>
-                    <p className="text-slate-500 text-sm">Coordinating roommate life</p>
+                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Task Board</h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">Coordinating roommate life</p>
                 </div>
-                <div className="bg-indigo-50 text-indigo-600 px-3 py-1.5 font-bold uppercase text-[10px] tracking-widest rounded-lg border border-indigo-100">
+                <div className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-3 py-1.5 font-bold uppercase text-[10px] tracking-widest rounded-lg border border-indigo-100 dark:border-indigo-900/30">
                     {tasks.length} Total
                 </div>
             </header>
 
-            <div className="flex gap-2 p-1.5 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner">
+            <div className="flex gap-2 p-1.5 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-inner">
                 <button
                     onClick={() => setFilter('my')}
                     className={cn(
                         "flex-1 py-2.5 rounded-xl font-bold uppercase tracking-widest text-[10px] transition-all duration-200",
                         filter === 'my'
-                            ? "bg-white text-indigo-600 shadow-sm"
-                            : "text-slate-500 hover:text-slate-700 hover:bg-white/50"
+                            ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                            : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/50"
                     )}
                 >
                     Assigned To Me
@@ -96,8 +96,8 @@ export default function Tasks() {
                     className={cn(
                         "flex-1 py-2.5 rounded-xl font-bold uppercase tracking-widest text-[10px] transition-all duration-200",
                         filter === 'all'
-                            ? "bg-white text-indigo-600 shadow-sm"
-                            : "text-slate-500 hover:text-slate-700 hover:bg-white/50"
+                            ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                            : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-800/50"
                     )}
                 >
                     Whole Room
@@ -107,18 +107,18 @@ export default function Tasks() {
             <div className="space-y-4">
                 {loading ? (
                     [1, 2, 3].map(i => (
-                        <div key={i} className="h-24 bg-white border border-slate-200 rounded-[2rem] animate-pulse"></div>
+                        <div key={i} className="h-24 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] animate-pulse"></div>
                     ))
                 ) : filteredTasks.length === 0 ? (
-                    <div className="text-center py-20 bento-card bg-slate-50 border-dashed border-2 border-slate-200 flex flex-col items-center justify-center">
-                        <div className="p-4 bg-slate-100 rounded-full mb-4">
-                            <LayoutGrid className="w-8 h-8 text-slate-300" />
+                    <div className="text-center py-20 bento-card bg-slate-50 dark:bg-slate-900/30 border-dashed border-2 border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center">
+                        <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-full mb-4">
+                            <LayoutGrid className="w-8 h-8 text-slate-300 dark:text-slate-600" />
                         </div>
-                        <p className="text-slate-400 text-lg font-bold tracking-tight italic">Empty board! 😴</p>
-                        <p className="text-slate-400 text-sm mt-1">Enjoy your free time.</p>
+                        <p className="text-slate-400 dark:text-slate-500 text-lg font-bold tracking-tight italic">Empty board! 😴</p>
+                        <p className="text-slate-400 dark:text-slate-600 text-sm mt-1">Enjoy your free time.</p>
                     </div>
                 ) : (
-                    <div className="bento-card !p-2 divide-y divide-slate-100">
+                    <div className="bento-card !p-2 divide-y divide-slate-100 dark:divide-slate-800">
                         {filteredTasks.map(task => (
                             <div key={task.id} className="first:pt-0 last:pb-0 p-4">
                                 <TaskItem
