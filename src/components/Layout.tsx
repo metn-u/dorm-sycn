@@ -20,6 +20,7 @@ export default function Layout() {
         { path: '/', icon: Home, label: 'Home' },
         { path: '/tasks', icon: CheckSquare, label: 'Tasks' },
         { path: '/add', icon: Plus, label: 'Add', primary: true },
+        { path: '/debts', icon: Receipt, label: 'Debts' },
         { path: '/calendar', icon: CalendarIcon, label: 'Calendar' }
     ]
 
